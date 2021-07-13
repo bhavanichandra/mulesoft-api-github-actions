@@ -23,7 +23,7 @@ jobs:
         uses: whelk-io/maven-settings-xml-action@v4
         with:
           repositories: '[{ "id": "MuleRepository", "url": "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/" }]'
-          servers: '[{ "id": "MuleRepository", "username":  "${{ secrets.MAVEN_USERNAME }}", "${{ secrets.MAVEN_PASSWORD }}" }]'
+          servers: '[{ "id": "MuleRepository", "username":  "${{ secrets.MAVEN_USERNAME }}", "${{ secrets.MAVEN_PASSWORD }}" ]'
       - name: Build
         run: mvn -B package --file pom.xml
       - name: Stamp artifact file name with commit hash
