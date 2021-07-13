@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build
-        run: mvn -B package --file pom.xml
+        run: mvn package --file pom.xml
       - name: Stamp artifact file name with commit hash
         run: |
           artifactName1=$(ls target/*.jar | head -1)
@@ -47,7 +47,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build
-        run: mvn -B test --file pom.xml
+        run: mvn test --file pom.xml
 
   deploy:
     needs: build
