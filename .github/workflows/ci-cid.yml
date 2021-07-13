@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build
-        run: mvn -B package --file pom.xml -DskipMunitTests -Dhttp.port=8081
+        run: mvn -B package --file pom.xml
       - name: Stamp artifact file name with commit hash
         run: |
           artifactName1=$(ls target/*.jar | head -1)
