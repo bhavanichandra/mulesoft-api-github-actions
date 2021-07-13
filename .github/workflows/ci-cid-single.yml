@@ -24,7 +24,7 @@ jobs:
         with:
           repositories: '[{ "id": "MuleRepository", "url": "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/" }]'
           servers: '[{ "id": "MuleRepository", "username":  "${{ secrets.MAVEN_USERNAME }}", "password": "${{ secrets.MAVEN_PASSWORD }}" }]'
-      - name: Build
+      - name: Build and Test
         run: mvn -B package --file pom.xml -Dhttp.port=8081
       - name: Stamp artifact file name with commit hash
         run: |
