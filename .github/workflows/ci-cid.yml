@@ -23,7 +23,7 @@ jobs:
         uses: whelk-io/maven-settings-xml-action@v4
         with:
           repositories: '[{ "id": "MuleRepository", "url": "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/" }]'
-          servers: '[{ "id": "MuleRepository", "username":  "${{ secrets.MAVEN_USERNAME }}", "${{ secrets.MAVEN_PASSWORD }}" ]'
+          servers: '[{ "id": "MuleRepository", "username":  "${{ secrets.MAVEN_USERNAME }}", "password": "${{ secrets.MAVEN_PASSWORD }}" }]'
       - name: Build
         run: mvn -B package --file pom.xml
       - name: Stamp artifact file name with commit hash
@@ -39,23 +39,23 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    steps:    
-    - uses: actions/checkout@v2
-    - uses: actions/cache@v1
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - uses: actions/download-artifact@master
-      with:
-        name: artifacts
-    - name: Deploy to CloudHub
-      env:
-        USERNAME: ${{ secrets.USERNAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        PLATFORM_CLIENT_ID: ${{ secrets.PLATFORM_CLIENT_ID }}
-        PLATFORM_CLIENT_SECRET: ${{ secrets.PLATFORM_CLIENT_SECRET }}
-      run: |
-        artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -DskipMunitTests -Dmule.artifact=$artifactName -Danypoint.username="$USERNAME" -Danypoint.password="$PASSWORD" -Danypoint.platform.clientId="$PLATFORM_CLIENT_ID" -Danypoint.platform.clientSecret="$PLATFORM_CLIENT_SECRET"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - uses: actions/download-artifact@master
+        with:
+          name: artifacts
+      - name: Deploy to CloudHub
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          PLATFORM_CLIENT_ID: ${{ secrets.PLATFORM_CLIENT_ID }}
+          PLATFORM_CLIENT_SECRET: ${{ secrets.PLATFORM_CLIENT_SECRET }}
+        run: |
+          artifactName=$(ls *.jar | head -1)
+          mvn mule:deploy -DskipMunitTests -Dmule.artifact=$artifactName -Danypoint.username="$USERNAME" -Danypoint.password="$PASSWORD" -Danypoint.platform.clientId="$PLATFORM_CLIENT_ID" -Danypoint.platform.clientSecret="$PLATFORM_CLIENT_SECRET"
