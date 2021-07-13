@@ -1,0 +1,17 @@
+#%RAML 1.0
+title: Contacts API
+version: v1
+
+
+/contacts:
+  get:
+    description: Get Contacts
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/get-contacts-example.json
+      500:
+        body:
+          application/json:
+            example: !include examples/get-contacts-error-example.json

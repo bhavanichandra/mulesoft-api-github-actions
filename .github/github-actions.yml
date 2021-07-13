@@ -1,0 +1,73 @@
+name: MuleSoft CI/CD with Maven
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Setup Java
+        uses: actions/steip-java@v1
+        with:
+          java-version: 1.8
+      - name: Build
+        run: mvn -B package --file pom.xml
+      - name: Stamp artifact file name with commit hash
+        run: |
+          artifactName1=$(ls target/*.jar | head -1)
+          commitHash=$(git rev-parse --short "$GITHUB_SHA")
+          artifactName2=$(ls target/*.jar | head -1 | sed "s/.jar/.$commitHash.jar/g")
+          mv $artifactName1 $artifactName2
+      - uses: actions/upload-artifact@master
+        with:
+          name: artifacts
+          path: target/*.jar
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Setup Java
+        uses: actions/steip-java@v1
+        with:
+          java-version: 1.8
+      - name: Build
+        run: mvn -B test --file pom.xml
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:    
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v1
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - uses: actions/download-artifact@master
+      with:
+        name: artifacts
+    - name: Deploy to CloudHub
+      env:
+        USERNAME: ${{ secrets.username }}
+        PASSWORD: ${{ secrets.password }}
+        PLATFORM_CLIENT_ID: ${{ secrets.platform_client_id }}
+        PLATFORM_CLIENT_SECRET: ${{ secrets.platform_client_secret }}
+      run: |
+        artifactName=$(ls *.jar | head -1)
+        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.username="$USERNAME" -Danypoint.password="$PASSWORD" -Danypoint.platform.clientId="$PLATFORM_CLIENT_ID" -Danypoint.platform.clientSecret="$PLATFORM_CLIENT_SECRET"

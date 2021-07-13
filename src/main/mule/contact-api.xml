@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+    <flow name="contact-api-main">
+        <http:listener config-ref="contact-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <logger level="INFO" doc:name="Logger" doc:id="b12597df-6575-4aec-82b3-783a9de44698" message="#[output application/json --- message]"/>
+		<apikit:router config-ref="contact-api-config" />
+    </flow>
+    <flow name="get:\contacts:contact-api-config">
+        <http:request method="GET" doc:name="Get Contacts" doc:id="702a8d11-dcd6-4e20-ac11-c2575a8e1caf" url="https://jsonplaceholder.typicode.com/users" />
+        <ee:transform doc:name="Transform Message" doc:id="9c6acd02-ce8b-40ac-a66e-0b236a2f48b1">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+fun splitNames(name) = do {
+	var split = (name splitBy " ")
+	---
+	{
+		firstName: split[0],
+		lastName: split[1]
+	}
+}
+output application/json
+---
+{
+	success: true,
+	data: payload map {
+		firstName: splitNames($.name).firstName,
+		lastName: splitNames($.name).lastName,
+		email: $.email,
+		company: $.company.name
+	},
+	errors: null
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <error-handler>
+            <on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="fd0c56e3-a5f9-436e-b0dc-7d51317af5bc">
+                <ee:transform doc:name="Transform Message" doc:id="8ff09330-c33f-4088-96f3-53ed4eb4db35">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	success: false,
+	data: null,
+	errors: [{
+		errorType: error.errorType,
+		errorMessage: if(error.description != null) (error.description) else (error.cause.message)
+	}]
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </on-error-continue>
+        </error-handler>
+    </flow>
+</mule>

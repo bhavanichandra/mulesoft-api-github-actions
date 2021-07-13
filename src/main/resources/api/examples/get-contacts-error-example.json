@@ -1,0 +1,11 @@
+{
+
+	"success": true,
+	"data": null,
+	"errors": [
+		{
+			"errorType": "INTERNAL_SERVICE_ERROR",
+			"errorMessage": "failed to fetch contacts"
+		}
+	]
+}

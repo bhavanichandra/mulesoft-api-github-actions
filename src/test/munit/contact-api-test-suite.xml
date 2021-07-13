@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<munit:config name="contact-api-test-suite.xml" />
+	<munit:test name="contact-api-test-suite-get:\contacts:contact-api-configTest" doc:id="d2f0b8e2-452a-49eb-a225-776d5c4316ee" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\contacts:contact-api-config" doc:id="11c68b51-2076-4b8e-b44a-9f03a9daaaf1" name="get:\contacts:contact-api-config"/>
+			<ee:transform doc:name="Transform Message" doc:id="5497d766-97d7-48b6-b2c8-41e01a7e975c" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that payload is success" doc:id="d1309b03-4735-4058-8066-c4ee552bb4aa" expression="#[payload.success]" is="#[MunitTools::equalTo(true)]" />
+			<munit-tools:assert-that doc:name="Assert that payload data is not empty" doc:id="fe842f53-82c4-45e5-a652-22163df2e8dc" expression="#[payload.data]" is="#[MunitTools::not(MunitTools::isEmpty())]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="contact-api-test-suite-get:\contacts:contact-api-failure-test" doc:id="f36c7d6e-5fde-421d-a118-12b6ed0166a8" description="End to End Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="11a9c147-0ce9-4035-9744-ddb0cfa8a78c" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET" attributeName="method" />
+					<munit-tools:with-attribute whereValue="Get Contacts" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="702a8d11-dcd6-4e20-ac11-c2575a8e1caf" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="https://jsonplaceholder.typicode.com/users" attributeName="url" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="CUSTOM:ERROR" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<flow-ref doc:name="Flow-ref to get:\contacts:contact-api-config" doc:id="93819997-d425-4c8a-9f2f-ce5165d7fc8e" name="get:\contacts:contact-api-config" />
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that payload is failed" doc:id="b48afecb-51e3-4d8f-8911-889ee34707c1" expression="#[payload.success]" is="#[MunitTools::equalTo(false)]" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="contact-api-test-full-api-test" doc:id="f9f09bfd-e63f-47ab-9f06-8f4f6745df59" >
+		<munit:execution >
+			<munit:set-event doc:name="Set Actual Event" doc:id="b26696a1-034f-49a6-b6d8-a2faae6e05fb" >
+				<munit:attributes value="#[{method: 'GET', requestPath: '/api/contacts/', listenerPath: '/api/*',relativePath: '/api/contacts/', scheme: 'http', version: 'HTTP/1.1',requestUri:'/api/contacts/',&#10;localAddress: '/127.0.0.1:8081', rawRequestUri: '/api/contacts', rawRequestPath:'/api/contacts', remoteAddress: '/127.0.0.1:59005', requestPath: '/api/contacts'&#10;} as Object {class: 'org.mule.extension.http.api.HttpRequestAttributes'}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow ref to contact-api-main" doc:id="4457f347-ad7b-4e3b-9298-e73ad8b176d7" name="contact-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that payload is success" doc:id="e0e257da-4461-4651-b8df-c70d2ef7cfc6" expression="#[payload.success]" is="#[MunitTools::equalTo(true)]" />
+			<munit-tools:assert-that doc:name="Assert that payload data is not empty" doc:id="24815142-a06c-4d7a-a746-1d3590aca76b" expression="#[payload.data]" is="#[MunitTools::not(MunitTools::isEmpty())]" />
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

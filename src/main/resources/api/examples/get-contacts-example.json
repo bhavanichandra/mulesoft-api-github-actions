@@ -1,0 +1,13 @@
+{
+
+	"success": true,
+	"data": [
+		{
+			"firstName": "Raju",
+			"lastName": "Kumar",
+			"email": "raju.kumar@example.com",
+			"company": "Google"
+		}
+	],
+	"errors": null
+}
