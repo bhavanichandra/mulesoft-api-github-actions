@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build
-        run: mvn -B package --file pom.xml -DskipMunitTests
+        run: mvn -B package --file pom.xml -DskipMunitTests -Dhttp.port=8081
       - name: Stamp artifact file name with commit hash
         run: |
           artifactName1=$(ls target/*.jar | head -1)
@@ -53,4 +53,4 @@ jobs:
         PLATFORM_CLIENT_SECRET: ${{ secrets.PLATFORM_CLIENT_SECRET }}
       run: |
         artifactName=$(ls *.jar | head -1)
-        mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.username="$USERNAME" -Danypoint.password="$PASSWORD" -Danypoint.platform.clientId="$PLATFORM_CLIENT_ID" -Danypoint.platform.clientSecret="$PLATFORM_CLIENT_SECRET"
+        mvn mule:deploy -DskipMunitTests -Dmule.artifact=$artifactName -Danypoint.username="$USERNAME" -Danypoint.password="$PASSWORD" -Danypoint.platform.clientId="$PLATFORM_CLIENT_ID" -Danypoint.platform.clientSecret="$PLATFORM_CLIENT_SECRET"
