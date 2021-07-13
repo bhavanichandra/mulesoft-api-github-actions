@@ -19,14 +19,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - uses: s4u/maven-settings-action@v2.4.0
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v4
         with:
-          servers: |
-            [{
-                "id": "MuleRepository",
-                "username": "${{ secrets.MAVEN_USERNAME }}",
-                "password": "${{ secrets.MAVEN_PASSWORD }}"
-            }]
+          repositories: '[{ "id": "MuleRepository", "url": "https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/" }]'
+          servers: '[{ "id": "MuleRepository", "username":  "${{ secrets.MAVEN_USERNAME }}", "${{ secrets.MAVEN_PASSWORD }}" }]'
       - name: Build
         run: mvn -B package --file pom.xml
       - name: Stamp artifact file name with commit hash
