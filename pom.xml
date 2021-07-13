@@ -13,6 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<app.runtime>4.3.0-20210622</app.runtime>
+		<app.name>contacts-api</app.name>
 		<mule.maven.plugin.version>3.5.1</mule.maven.plugin.version>
 		<munit.version>2.3.4</munit.version>
 	</properties>
@@ -31,21 +32,18 @@
 				<extensions>true</extensions>
 				<configuration>
 					<cloudHubDeployment>
-						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>${app.runtime}</muleVersion>
+						<muleVersion>4.3.0</muleVersion>
 						<username>${username}</username>
 						<password>${password}</password>
-						<applicationName>${cloudhub.application.name}</applicationName>
+						<applicationName>${app.name}-dev</applicationName>
 						<environment>Sandbox</environment>
-						<region>us-east-2</region>
-						<workers>1</workers>
-						<workerType>MICRO</workerType>
 						<objectStoreV2>true</objectStoreV2>
 						<properties>
 							<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
 							<anypoint.platform.client_id>${anypoint.platform.clientId}</anypoint.platform.client_id>
 							<anypoint.platform.client_secret>${anypoint.platform.clientSecret}</anypoint.platform.client_secret>
 							<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+							<http.port>8081</http.port>
 						</properties>
 					</cloudHubDeployment>
 				</configuration>
