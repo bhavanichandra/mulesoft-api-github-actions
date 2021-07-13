@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
         <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
     <apikit:config name="contact-api-config" api="contact-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-	<api-gateway:autodiscovery apiId="17061523" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="acb518df-40e8-4701-9f44-f0c64008ba01" flowRef="contact-api-main" />
+	<api-gateway:autodiscovery apiId="17061998" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="acb518df-40e8-4701-9f44-f0c64008ba01" flowRef="contact-api-main" />
 	
 	
 </mule>

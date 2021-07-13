@@ -1,4 +1,4 @@
-name: MuleSoft CI/CD with Maven
+name: MuleSoft CI/CD with Maven Single Step
 
 on:
   push:
@@ -41,5 +41,5 @@ jobs:
         run: |
           artifactName=$(ls target/*.jar | head -1)
           echo $artifactName
-          mvn mule:deploy -DskipMunitTests -Dmule.artifact=$artifactName -Danypoint.username="$USERNAME" -Danypoint.password="$PASSWORD" -Danypoint.platform.clientId="$PLATFORM_CLIENT_ID" -Danypoint.platform.clientSecret="$PLATFORM_CLIENT_SECRET"
+          mvn mule:deploy -Dmule.artifact=$artifactName -Danypoint.username="$USERNAME" -Danypoint.password="$PASSWORD" -Danypoint.platform.clientId="$PLATFORM_CLIENT_ID" -Danypoint.platform.clientSecret="$PLATFORM_CLIENT_SECRET"
       
