@@ -30,22 +30,24 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<uri>https://anypoint.mulesoft.com</uri>
-					<muleVersion>${app.runtime}</muleVersion>
-					<username>${username}</username>
-					<password>${password}</password>
-					<applicationName>${cloudhub.application.name}</applicationName>
-					<environment>Sandbox</environment>
-					<region>us-east-2</region>
-					<workers>1</workers>
-					<workerType>MICRO</workerType>
-					<objectStoreV2>true</objectStoreV2>
-					<properties>
-						<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
-						<anypoint.platform.client_id>${anypoint.platform.clientId}</anypoint.platform.client_id>
-						<anypoint.platform.client_secret>${anypoint.platform.clientSecret}</anypoint.platform.client_secret>
-						<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
-					</properties>
+					<cloudHubDeployment>
+						<uri>https://anypoint.mulesoft.com</uri>
+						<muleVersion>${app.runtime}</muleVersion>
+						<username>${username}</username>
+						<password>${password}</password>
+						<applicationName>${cloudhub.application.name}</applicationName>
+						<environment>Sandbox</environment>
+						<region>us-east-2</region>
+						<workers>1</workers>
+						<workerType>MICRO</workerType>
+						<objectStoreV2>true</objectStoreV2>
+						<properties>
+							<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
+							<anypoint.platform.client_id>${anypoint.platform.clientId}</anypoint.platform.client_id>
+							<anypoint.platform.client_secret>${anypoint.platform.clientSecret}</anypoint.platform.client_secret>
+							<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
+						</properties>
+					</cloudHubDeployment>
 				</configuration>
 			</plugin>
 			<plugin>
