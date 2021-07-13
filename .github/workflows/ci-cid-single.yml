@@ -1,4 +1,4 @@
-name: MuleSoft CI/CD with Maven Single Step
+name: 1 Step MuleSoft CI/CD with Maven
 
 on:
   push:
