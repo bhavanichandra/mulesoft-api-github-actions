@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="mvn-ant-test-app" basedir=".">
 
-    <property name="jarPath" location="./target/*.jar"/>
     <condition property="isWindows">
         <os family="windows" />
     </condition>
@@ -35,7 +34,7 @@
 
     <target name="deploy" if="isUnix">
         <exec dir="." executable="sh">
-            <arg line="-c 'mvn mule:deploy -Danypoint.username=mdeveloper -Danypoint.password=devUser@123 -Danypoint.platform.clientId=56833c386095420d8e3736c60d710138 -Danypoint.platform.clientSecret=D03FEbAF0eDb4B5e9f3532391126948E'" />
+            <arg line="-c 'mvn mule:deploy -Danypoint.username=USERNAME -Danypoint.password=PASSWORD -Danypoint.platform.clientId=CLIENTID -Danypoint.platform.clientSecret=CLIENT_SECRET'" />
         </exec>
     </target>
 
