@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="mvn-ant-test-app" basedir=".">
+
+    <property name="jarPath" location="./target/*.jar"/>
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+
+    <condition property="isUnix">
+        <os family="unix" />
+    </condition>
+
+    <target name="all" depends="build, deploy" />
+
+    <!-- For Windows-->
+    <target name="build-win" if="isWindows">
+        <exec dir="." executable="cmd">
+            <arg line="/c mvn clean install" />
+        </exec>
+    </target>
+
+    <target name="deploy-win" if="isWindows">
+        <exec dir="." executable="cmd">
+            <arg line="/c 'mvn clean package deploy -Dusername=mdeveloper -Dpassword=devUser@123'" />
+        </exec>
+    </target>
+
+    <!-- Linux-->
+
+    <target name="build" if="isUnix">
+        <exec dir="." executable="">
+            <arg line="-c 'mvn clean install -DskipMunitTests -Dhttp.port=8081'" />
+        </exec>
+    </target>
+
+    <target name="deploy" if="isUnix">
+        <exec dir="." executable="sh">
+            <arg line="-c 'mvn mule:deploy -Danypoint.username=mdeveloper -Danypoint.password=devUser@123 -Danypoint.platform.clientId=56833c386095420d8e3736c60d710138 -Danypoint.platform.clientSecret=D03FEbAF0eDb4B5e9f3532391126948E'" />
+        </exec>
+    </target>
+
+</project>

@@ -16,6 +16,7 @@
 		<app.name>contacts-api</app.name>
 		<mule.maven.plugin.version>3.5.1</mule.maven.plugin.version>
 		<munit.version>2.3.4</munit.version>
+		<mule.artifact>./target/${project.artifactId}-${project.version}-${project.packaging}.jar</mule.artifact>
 	</properties>
 
 	<build>
@@ -38,6 +39,7 @@
 						<applicationName>${app.name}-dev</applicationName>
 						<environment>Sandbox</environment>
 						<objectStoreV2>true</objectStoreV2>
+						<artifact>${mule.artifact}</artifact>
 						<properties>
 							<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
 							<anypoint.platform.client_id>${anypoint.platform.clientId}</anypoint.platform.client_id>
