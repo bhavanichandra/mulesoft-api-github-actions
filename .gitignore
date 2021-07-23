@@ -25,6 +25,7 @@ local.properties
 .loadpath
 .project
 .classpath
+.backup/
 
 # External tool builders
 .externalToolBuilders/

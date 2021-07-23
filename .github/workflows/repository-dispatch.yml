@@ -1,0 +1,11 @@
+name: Deploy via Respository Dispatch 
+
+on:
+  repository_dispatch:
+    types: [some_event]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Event Name: ${{ github.event.event_type}}"
