@@ -2,20 +2,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.learning</groupId>
+	<groupId>94624f65-527e-4f60-88ad-327830ea81ab</groupId>
 	<artifactId>contacts-api</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
+
 	<packaging>mule-application</packaging>
 
 	<name>contacts-api</name>
+	<description>A mule application to get contacts from external systems</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<app.runtime>4.3.0-20210622</app.runtime>
-		<app.name>contacts-api</app.name>
 		<mule.maven.plugin.version>3.5.1</mule.maven.plugin.version>
+		<maven.assembly.plugin.version>2.6</maven.assembly.plugin.version>
 		<munit.version>2.3.4</munit.version>
+		<categories key="POC">MULESOFT_POCS</categories>
+		<tags>mule-4,assets</tags>
 	</properties>
 
 	<build>
@@ -31,23 +35,31 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
-					<classifier>mule-application</classifier>
-					<cloudHubDeployment>
-						<muleVersion>4.3.0</muleVersion>
-						<username>${username}</username>
-						<password>${password}</password>
-						<applicationName>${app.name}-dev</applicationName>
-						<environment>Sandbox</environment>
-						<objectStoreV2>true</objectStoreV2>
-						<properties>
-							<anypoint.platform.analytics_base_uri>https://analytics-ingest.anypoint.mulesoft.com</anypoint.platform.analytics_base_uri>
-							<anypoint.platform.client_id>${anypoint.platform.clientId}</anypoint.platform.client_id>
-							<anypoint.platform.client_secret>${anypoint.platform.clientSecret}</anypoint.platform.client_secret>
-							<anypoint.platform.base_uri>https://anypoint.mulesoft.com/</anypoint.platform.base_uri>
-							<http.port>8081</http.port>
-						</properties>
-					</cloudHubDeployment>
+					<classifier>mule-application-example</classifier>
 				</configuration>
+			</plugin>
+			<!-- Assembly plugin for assembling docs -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven.assembly.plugin.version}</version>
+				<configuration>
+					<appendAssemblyId>true</appendAssemblyId>
+				</configuration>
+				<executions>
+					<execution>
+						<id>create-distribution</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>/src/main/resources/docs-assembly/assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>com.mulesoft.munit.tools</groupId>
@@ -121,11 +133,20 @@
 		</dependency>
 	</dependencies>
 
+
+	<distributionManagement>
+		<repository>
+			<id>Repository</id>
+			<name>Corporate Repository</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/94624f65-527e-4f60-88ad-327830ea81ab/maven</url>
+			<layout>default</layout>
+		</repository>
+	</distributionManagement>
 	<repositories>
 		<repository>
-			<id>anypoint-exchange-v2</id>
-			<name>Anypoint Exchange</name>
-			<url>https://maven.anypoint.mulesoft.com/api/v2/maven</url>
+			<id>Repository</id>
+			<name>Corporate Repository</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/organizations/94624f65-527e-4f60-88ad-327830ea81ab/maven</url>
 			<layout>default</layout>
 		</repository>
 		<repository>
@@ -134,29 +155,15 @@
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
-		<repository>
-			<id>mulesoft-public</id>
-			<name>MuleSoft Public Repository</name>
-			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
-			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>MuleRepository</id>
-			<name>MuleRepository</name>
-			<url>https://repository.mulesoft.org/nexus-ee/content/repositories/releases-ee/</url>
-		</repository>
 	</repositories>
-
 	<pluginRepositories>
 		<pluginRepository>
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>
 			<layout>default</layout>
 			<url>https://repository.mulesoft.org/releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
 		</pluginRepository>
 	</pluginRepositories>
+
 
 </project>
