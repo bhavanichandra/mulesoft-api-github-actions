@@ -8,7 +8,7 @@
 
 	<packaging>mule-application</packaging>
 
-	<name>contacts-api</name>
+	<name>Contacts System API</name>
 	<description>A mule application to get contacts from external systems</description>
 
 	<properties>
