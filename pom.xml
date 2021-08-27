@@ -31,6 +31,7 @@
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
 				<configuration>
+					<classifier>mule-application</classifier>
 					<cloudHubDeployment>
 						<muleVersion>4.3.0</muleVersion>
 						<username>${username}</username>
